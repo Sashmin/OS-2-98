@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <float.h>
 
+const int MAX_STR_SIZE = 200;
+
 struct ArrayToChange
 {
 	int arr_size;
@@ -60,17 +62,40 @@ DWORD WINAPI average(LPVOID array_struct)
 
 int main()
 {
+	char* p;
+	long isNum = 0;
+	char checkBuffer[MAX_STR_SIZE + 1] = "";
 	ArrayToChange mainArray;
 
 	printf("Enter the size of the array: ");
-	scanf_s("%d", &mainArray.arr_size);
+	scanf_s("%s", &checkBuffer, MAX_STR_SIZE);
+	isNum = strtol(checkBuffer, &p, 10);
+	if (*p)
+	{
+		printf("Not a number");
+		return 1;
+	}
+	if (isNum < 0)
+	{
+		printf("Size cannot be negative");
+		return 1;
+	}
+	mainArray.arr_size = isNum;
 
 	mainArray.array = new double[mainArray.arr_size];
 
 	for (int i = 0; i < mainArray.arr_size; i++)
 	{
 		printf("Element %d: ", i + 1);
-		scanf_s("%lf", &mainArray.array[i]);
+		scanf_s("%s", checkBuffer, MAX_STR_SIZE);
+		isNum = strtol(checkBuffer, &p, 10);
+		while (*p)
+		{
+			printf("Invalid output\nElement %d: ", i + 1);
+			scanf_s("%s", checkBuffer, MAX_STR_SIZE);
+			isNum = strtol(checkBuffer, &p, 10);
+		}
+		mainArray.array[i] = isNum;
 	}
 
 	printf("\n");
@@ -115,5 +140,7 @@ int main()
 
 		printf("%.2lf ", mainArray.array[i]);
 	}
+
+	delete[] mainArray.array;
 }
 
