@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <stdio.h>
 #include <float.h>
+#include <math.h>
 
 const int MAX_STR_SIZE = 200;
 
@@ -12,6 +13,14 @@ struct ArrayToChange
 	int max_elem;
 	double average;
 };
+
+bool isInteger(double number)
+{
+	if (number < 0) {
+		number = -number;
+	}
+	return number == floor(number);
+}
 
 DWORD WINAPI min_max(LPVOID array_struct)
 {
@@ -138,7 +147,15 @@ int main()
 			mainArray.array[i] = mainArray.average;
 		}
 
-		printf("%.2lf ", mainArray.array[i]);
+		if (isInteger(mainArray.array[i]))
+		{
+			printf("%.lf ", mainArray.array[i]);
+		}
+		else 
+		{
+			printf("%.2lf ", mainArray.array[i]);
+		}
+
 	}
 
 	delete[] mainArray.array;
